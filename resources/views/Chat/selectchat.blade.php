@@ -214,36 +214,65 @@
 
                     <div class="nano-content messages pad-all" tabindex="0">
                         <ul class="list-unstyled media-block">
+{{--                            @dd($messages)--}}
                             @foreach($messages as $message)
-
-                                <li class="mar-btm receive-msg">
-                                    <div class="media-left">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="img-circle img-sm" alt="Profile Picture">
-                                    </div>
-                                    <div class="media-body pad-hor">
-                                        <div class="speech">
-                                            <h4>{{$message->message}}</h4>
-                                            <p class="speech-time">
-                                                <i class="fa fa-clock-o fa-fw"></i>{{$message->created_at->diffForHumans()}}
-                                            </p>
+                               @if(session('user')->id === $message->sender_id)
+                                    <li class="mar-btm message">
+                                        <div class="media-right">
+                                            <img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="img-circle img-sm" alt="Profile Picture">
                                         </div>
-                                    </div>
-                                </li>
-
-
-                                <li class="mar-btm message">
-                                    <div class="media-right">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="img-circle img-sm" alt="Profile Picture">
-                                    </div>
-                                    <div class="media-body pad-hor speech-right">
-                                        <div class="speech">
-                                            <h4>{{$message->message}}</h4>
-                                            <p class="speech-time">
-                                                <i class="fa fa-clock-o fa-fw"></i>{{$message->created_at->diffForHumans()}}
-                                            </p>
+                                        <div class="media-body pad-hor speech-right">
+                                            <div class="speech">
+                                                <h4>{{$message->message}}</h4>
+                                                <p class="speech-time">
+                                                    <i class="fa fa-clock-o fa-fw"></i>{{$message->created_at->diffForHumans()}}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </li>
+                                    </li>
+                                @else
+                                    <li class="mar-btm receive-msg">
+                                        <div class="media-left">
+                                            <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="img-circle img-sm" alt="Profile Picture">
+                                        </div>
+                                        <div class="media-body pad-hor">
+                                            <div class="speech">
+                                                <h4>{{$message->message}}</h4>
+                                                <p class="speech-time">
+                                                    <i class="fa fa-clock-o fa-fw"></i>{{$message->created_at->diffForHumans()}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </li>
+                               @endif
+{{--                                <li class="mar-btm receive-msg">--}}
+{{--                                    <div class="media-left">--}}
+{{--                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="img-circle img-sm" alt="Profile Picture">--}}
+{{--                                    </div>--}}
+{{--                                    <div class="media-body pad-hor">--}}
+{{--                                        <div class="speech">--}}
+{{--                                            <h4>{{$message->message}}</h4>--}}
+{{--                                            <p class="speech-time">--}}
+{{--                                                <i class="fa fa-clock-o fa-fw"></i>{{$message->created_at->diffForHumans()}}--}}
+{{--                                            </p>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </li>--}}
+
+
+{{--                                <li class="mar-btm message">--}}
+{{--                                    <div class="media-right">--}}
+{{--                                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="img-circle img-sm" alt="Profile Picture">--}}
+{{--                                    </div>--}}
+{{--                                    <div class="media-body pad-hor speech-right">--}}
+{{--                                        <div class="speech">--}}
+{{--                                            <h4>{{$message->message}}</h4>--}}
+{{--                                            <p class="speech-time">--}}
+{{--                                                <i class="fa fa-clock-o fa-fw"></i>{{$message->created_at->diffForHumans()}}--}}
+{{--                                            </p>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </li>--}}
                             @endforeach
 
                         </ul>
