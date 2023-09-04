@@ -23,8 +23,10 @@ class MessageController extends Controller
     }
 
     public function receive(Request $request){
+//        dd($request->toArray());
         $data = [
             'message'=>$request->message,
+            'receiver_id'=>$request->receiver_id
         ];
         return response()->json($data);
     }
