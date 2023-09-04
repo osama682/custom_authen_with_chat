@@ -7,6 +7,8 @@
     <title>messages chat widget - Bootdey.com</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
         body{
@@ -202,6 +204,7 @@
                         <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#demo-chat-body"><i class="fa fa-chevron-down"></i></button>
                     </div>
                 </div>
+                <p style="display: none" id="unique_receiver_id">{{$user->id}}</p>
                 <h3 class="panel-title">Chat of <b>{{session('user')->name}}</b> with <b>{{$user->name}}</b></h3>
             </div>
 
@@ -212,20 +215,20 @@
                     <div class="nano-content messages pad-all" tabindex="0">
                         <ul class="list-unstyled media-block">
                             @foreach($messages as $message)
-{{--                                <h3>{{$message->message}}</h3>--}}
-{{--                                <li class="mar-btm">--}}
-{{--                                    <div class="media-left">--}}
-{{--                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="img-circle img-sm" alt="Profile Picture">--}}
-{{--                                    </div>--}}
-{{--                                    <div class="media-body pad-hor">--}}
-{{--                                        <div class="speech">--}}
-{{--                                            <h4>{{$message->message}}</h4>--}}
-{{--                                            <p class="speech-time">--}}
-{{--                                                <i class="fa fa-clock-o fa-fw"></i>{{$message->created_at->diffForHumans()}}--}}
-{{--                                            </p>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </li>--}}
+
+                                <li class="mar-btm receive-msg">
+                                    <div class="media-left">
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="img-circle img-sm" alt="Profile Picture">
+                                    </div>
+                                    <div class="media-body pad-hor">
+                                        <div class="speech">
+                                            <h4>{{$message->message}}</h4>
+                                            <p class="speech-time">
+                                                <i class="fa fa-clock-o fa-fw"></i>{{$message->created_at->diffForHumans()}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
 
 
                                 <li class="mar-btm message">
@@ -267,13 +270,64 @@
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 
+    const pusher = new Pusher('{{config('broadcasting.connections.pusher.key')}}',{cluster:'ap2'});
+    const channel = pusher.subscribe('public');
+
+
 $(document).ready(function (){
+    var receiver_id = $('#unique_receiver_id').text();
+    channel.bind('chat',function (response){
+        console.log(receiver_id)
+        let data = {
+            '_token': '{{csrf_token()}}',
+            'message':response.message,
+        }
+        let url = '{{route('receive')}}'
+        // if (receiver_id === response.user_id){
+            $.post(url, data, function (response){
+                var msg = response.message;
+                var receiceMsg = $('<ul class="list-unstyled media-block">' +
+                    '<li class="mar-btm">' +
+                    '<div class="media-left">' +
+                    '<img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="img-circle img-sm" alt="Profile Picture">' +
+                    '</div>' +
+                    '<div class="media-body pad-hor">' +
+                    '<div class="speech">' +
+                    '<h4>' + msg + '</h4>' +
+                    '<p class="speech-time">' +
+                    '<i class="fa fa-clock-o fa-fw"></i>just now' +
+                    '</p>' +
+                    '</div>' +
+                    '</div>' +
+                    '</li>' +
+                    '</ul>');
+
+                $('.messages').append(receiceMsg)
+                $(".messages > .receive-msg").last().after(response);
+                $(document).scrollTop($(document).height());
+
+
+            });
+        // }
+
+
+        // console.log(response)
+
+
+    });
+
    $('.submit').click(function (){
+       // event.preventDefault();
        var message = $('.user-message').val();
        var user_id = $('.user-id').val();
        var sender_id = $('.sender-id').val()
 
        var url = '{{route('broadcast')}}';
+       $.ajaxSetup({
+           headers: {
+               'X-Socket-Id': pusher.connection.socket_id
+           }
+       });
        let data = {
            '_token': '{{csrf_token()}}',
            'message':message,

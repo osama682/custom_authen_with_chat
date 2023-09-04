@@ -45,7 +45,7 @@ Route::post('/logout',[LoginController::class,'logout'])->name('logout');
 Route::get('/show_chats',[ChatController::class,'showChats'])->name('chat.page');
 Route::post('/chat/{user}/{sender}',[ChatController::class,'startChat'])->name('start.chat');
 Route::post('/broadcast',[MessageController::class,'broadcast'])->name('broadcast');
-
+Route::post('/receive',[MessageController::class,'receive'])->name('receive');
 
 
 
