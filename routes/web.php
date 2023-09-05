@@ -47,5 +47,5 @@ Route::post('/chat/{user}/{sender}',[ChatController::class,'startChat'])->name('
 Route::post('/broadcast',[MessageController::class,'broadcast'])->name('broadcast');
 Route::post('/receive',[MessageController::class,'receive'])->name('receive');
 
-
+Route::post('/search',[ChatController::class,'search'])->name('search.chat');
 

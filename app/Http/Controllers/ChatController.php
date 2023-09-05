@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
+use function PHPUnit\Framework\isEmpty;
 
 class ChatController extends Controller
 {
@@ -22,6 +23,19 @@ class ChatController extends Controller
                             ->orWhere('receiver_id',$sender)
                             ->where('sender_id',$user->id)->get();
         return view('Chat.selectchat', ['user' => $user, 'messages' => $messages]);
+
+    }
+
+    public function search(Request $request){
+        $search_query = $request->search;
+        $chats = User::where('name','LIKE',"%{$search_query}%")->get();
+        $empty_chats = 'No user found';
+        if($chats->isEmpty()){
+            return view('Chat.chatpage',['empty_chats'=> $empty_chats]);
+        }
+        else{
+            return view('Chat.chatpage',['chats'=> $chats]);
+        }
 
     }
 }
