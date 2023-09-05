@@ -28,7 +28,7 @@ class ChatController extends Controller
 
     public function search(Request $request){
         $search_query = $request->search;
-        $chats = User::where('name','LIKE',"%{$search_query}%")->get();
+        $chats = User::where('name','LIKE',"%{$search_query}%")->where('id', '!=', session('user')->id)->get();
         $empty_chats = 'No user found';
         if($chats->isEmpty()){
             return view('Chat.chatpage',['empty_chats'=> $empty_chats]);
