@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['web', 'blockAccess'])->group(function () {
     Route::get('/dashboard',[RegisterController::class,'dashboard'])->name('dashboard');
     Route::get('/show_chats',[ChatController::class,'showChats'])->name('chat.page');
-    Route::post('/chat/{user}/{sender}',[ChatController::class,'startChat'])->name('start.chat');
+    Route::post('/chat/{userId}/{senderId}',[ChatController::class,'startChat'])->name('start.chat');
     Route::post('/broadcast',[MessageController::class,'broadcast'])->name('broadcast');
     Route::post('/receive',[MessageController::class,'receive'])->name('receive');
     Route::post('/search',[ChatController::class,'search'])->name('search.chat');
