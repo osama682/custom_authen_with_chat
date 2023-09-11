@@ -28,9 +28,9 @@
     </form>
     <br>
 
-        <a href="{{route('chat.page')}}">
-            <button type="submit" class="btn btn-primary float-left">Refresh</button>
-        </a>
+    <a href="{{route('chat.page')}}">
+        <button type="submit" class="btn btn-primary">Refresh</button>
+    </a>
 
 
     <hr style="color: darkslategray">
@@ -62,7 +62,7 @@
                     <h1>No user found</h1>
                 @else
                     @foreach($users as $user)
-                        <div style="margin: 10px;border-radius: 10%;box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);"
+                        <div style="margin: 10px;border-radius: 5%;box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);"
                              class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                             <div>
                                 <img height="50px" style="border-radius: 50%"
@@ -72,6 +72,7 @@
                                 <p style="padding: 10px 0 0 50px; color: grey">
                                     3 minutes ago
                                 </p>
+
                             </div>
                             <form method="POST" action="{{route('start.chat',['user' => $user, 'sender' => $sender])}}">
                                 @csrf

@@ -19,22 +19,22 @@ class ChatController extends Controller
     public function startChat(User $user, $sender)
     {
         $messages = Message::where('sender_id', $sender)
-                            ->where('receiver_id', $user->id)
-                            ->orWhere('receiver_id',$sender)
-                            ->where('sender_id',$user->id)->get();
+            ->where('receiver_id', $user->id)
+            ->orWhere('receiver_id', $sender)
+            ->where('sender_id', $user->id)->get();
         return view('Chat.selectchat', ['user' => $user, 'messages' => $messages]);
 
     }
 
-    public function search(Request $request){
+    public function search(Request $request)
+    {
         $search_query = $request->search;
-        $chats = User::where('name','LIKE',"%{$search_query}%")->where('id', '!=', session('user')->id)->get();
+        $chats = User::where('name', 'LIKE', "%{$search_query}%")->where('id', '!=', session('user')->id)->get();
         $empty_chats = 'No user found';
-        if($chats->isEmpty()){
-            return view('Chat.chatpage',['empty_chats'=> $empty_chats]);
-        }
-        else{
-            return view('Chat.chatpage',['chats'=> $chats]);
+        if ($chats->isEmpty()) {
+            return view('Chat.chatpage', ['empty_chats' => $empty_chats]);
+        } else {
+            return view('Chat.chatpage', ['chats' => $chats]);
         }
 
     }
